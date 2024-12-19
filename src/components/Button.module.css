@@ -1,0 +1,39 @@
+.btnPrimary {
+  box-shadow:
+    0px -2px 0px 0px rgba(0, 0, 0, 0.25) inset,
+    0px 0px 28.1px -3px #645bf9;
+}
+
+.btnPrimary:hover {
+  box-shadow:
+    0px -2px 0px 0px rgba(0, 0, 0, 0.25) inset,
+    0px 0px 20.1px -6px #a39dff;
+}
+
+.btnSecondary {
+  box-shadow:
+    0px -2px 0px 0px rgba(0, 0, 0, 0.25) inset,
+    0px 0px 28px -3px #01ff67;
+}
+
+.btnSecondary:hover {
+  box-shadow:
+    0px -2px 0px 0px rgba(0, 0, 0, 0.25) inset,
+    0px 0px 20px -6px #5aff9c;
+}
+
+.btnTeritary {
+  box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 20.1px -6px #FAA23A;
+}
+
+.btnTeritary:hover {
+   box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 20.1px -6px #FFC977;
+}
+
+.btnInfo {
+ box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 28.1px -3px #0185FF;
+}
+
+.btnInfo:hover {
+ box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 20.1px -6px #58AFFF;
+}

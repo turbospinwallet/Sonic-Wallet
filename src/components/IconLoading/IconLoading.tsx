@@ -1,0 +1,44 @@
+/**
+ * Takes in custom size and stroke for circle color, default to primary color as fill,
+ * need ...rest for layered styles on top
+ */
+import clsx from 'clsx';
+
+type Color = 'white' | 'primary' | 'secondary';
+
+enum ColorParse {
+  white = '#FFFFFF',
+  primary = 'var(--color-primary)',
+  secondary = 'var(--color-secondary)',
+}
+
+export default function IconLoading({
+  size = '24px',
+  color = 'white',
+  className,
+  ...rest
+}: {
+  size?: string;
+  className?: string;
+  color?: Color;
+  [k: string]: any;
+}) {
+  return (
+    <svg
+      className={clsx('animate-spin-slow', className)}
+      style={{ height: size, width: size }}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...rest}
+    >
+      <path
+        d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 9.27455 20.9097 6.80375 19.1414 5"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke={ColorParse[color]}
+      />
+    </svg>
+  );
+}

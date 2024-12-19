@@ -1,0 +1,12 @@
+node_modules
+build
+coverage
+public
+.github
+global.d.ts
+.vscode
+*.json
+.next
+
+**/.cache
+src/api-models
