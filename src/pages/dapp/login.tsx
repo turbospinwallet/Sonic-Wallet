@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { useConnect } from 'wagmi';
 import { IoChevronBack } from 'react-icons/io5';
 import reactiveStorage from '@/internals/reactive-storage';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
@@ -12,12 +11,12 @@ import { useTelegram } from '@/hooks/useTelegram';
 import { useWallet } from '@/hooks/useWallet';
 import useNotification from '@/hooks/useNotification';
 import { useAppState } from '@/modules/shared/state/app-state';
+import PasswordModal from '@/modules/shared/components/PasswordModal';
+import { usePasswordStore } from '@/stores/passwordStore';
 
 const Login = () => {
   const { showBackButton } = useDisplayBackButtonMiniApp();
   const toast = useNotification();
-  const { connect } = useConnect();
-
   const router = useRouter();
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
@@ -27,6 +26,8 @@ const Login = () => {
   const { userInfo, params } = useTelegram();
   const { formatWalletSaved } = useWallet();
   const { setNavigated } = useAppState();
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const { setPassword } = usePasswordStore();
 
   const handleChangeInput = (text: string) => {
     setInput(text);
@@ -52,39 +53,36 @@ const Login = () => {
   const handleLogin = () => {
     try {
       if (wallet) {
-        setIsLoading(true);
-
-        // Connect wallet using wagmi
-        // connect({
-        //   address: wallet.address,
-        //   chainId: sonicBlazeChain.id,
-        // });
-
-        // const body = {
-        // 	address: wallet.address,
-        // 	authenticate: userInfo,
-        // 	code: params?.code,
-        // };
-
-        // await createUser(body);
-
-        const savedWallet = formatWalletSaved(wallet);
-
-        // Save wallet info
-        reactiveStorage.set('USER_CREDENTIAL', {
-          [wallet.address]: savedWallet,
-        });
-        reactiveStorage.set('ACTIVE_WALLET', {
-          address: wallet.address,
-        });
-
-        toast('Login successful');
-        void router.push('/dapp/wallet');
+        setShowPasswordModal(true);
       }
+    } catch (error: any) {
+      toast(error.message || 'Login failed', 'error');
+    }
+  };
+
+  const handlePasswordSubmit = (password: string) => {
+    setIsLoading(true);
+    try {
+      const savedWallet = formatWalletSaved(wallet!, password);
+
+      // Save wallet info without saving password
+      reactiveStorage.set('USER_CREDENTIAL', {
+        [wallet!.address]: savedWallet,
+      });
+      reactiveStorage.set('ACTIVE_WALLET', {
+        address: wallet!.address,
+      });
+
+      // Save password to password store
+      setPassword(password);
+
+      toast('Login successful');
+      void router.push('/dapp/wallet');
     } catch (error: any) {
       toast(error.message || 'Login failed', 'error');
     } finally {
       setIsLoading(false);
+      setShowPasswordModal(false);
     }
   };
 
@@ -136,6 +134,13 @@ const Login = () => {
           Continue
         </ButtonCustom>
       </div>
+      <PasswordModal
+        isOpen={showPasswordModal}
+        onClose={() => setShowPasswordModal(false)}
+        onSubmit={handlePasswordSubmit}
+        mode="create"
+        title="Create Password"
+      />
     </div>
   );
 };

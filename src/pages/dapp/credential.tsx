@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FiCopy, FiEye, FiEyeOff, FiInfo } from 'react-icons/fi';
 import { IoChevronBack } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
@@ -11,13 +11,18 @@ const Credential = () => {
   const toast = useNotification();
   const { showBackButton } = useDisplayBackButtonMiniApp();
   const [showSeed, setShowSeed] = React.useState<number[]>([]);
-  const { wallet } = useWallet();
+  const { wallet, password } = useWallet();
   const { copyText } = useCopyText();
   const router = useRouter();
 
   useEffect(() => {
     showBackButton();
   }, []);
+
+  const decryptedWallet = useMemo(() => {
+    if (!wallet || !password) return null;
+    return wallet;
+  }, [wallet, password]);
 
   const renderOptionButton = (num: number, isPrivateKey: boolean) => {
     return (
@@ -72,7 +77,7 @@ const Credential = () => {
           <p className="text-xl font-bold mb-4 text-neutral">Private key</p>
           <div className="rounded-md border-neutral/20 border">
             <textarea
-              value={wallet?.privateKey || ''}
+              value={decryptedWallet?.privateKey || ''}
               disabled
               className="bg-secondary/50 resize-none w-full h-full rounded-md p-3 text-neutral"
               style={{ filter: showSeed?.includes(1) ? 'blur(0)' : 'blur(4px)' }}
@@ -87,7 +92,7 @@ const Credential = () => {
           <p className="text-xl font-bold mb-4 text-neutral">Seedphrase</p>
           <div className="rounded-md border-neutral/20 border">
             <textarea
-              value={wallet?.mnemonic || ''}
+              value={decryptedWallet?.mnemonic || ''}
               disabled
               className="bg-secondary/50 resize-none w-full h-full rounded-md p-3 text-neutral"
               style={{ filter: showSeed?.includes(2) ? 'blur(0)' : 'blur(4px)' }}

@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import { FiX } from 'react-icons/fi';
@@ -29,13 +29,6 @@ export default function BasicModal({
   withCloseButton = true,
   ...props
 }: ModalBasicProps) {
-  const cancelButtonRef = useRef(null);
-  const handleClose = () => {
-    if (onClose) {
-      onClose();
-    }
-  };
-
   return (
     <Transition.Root
       show={open}

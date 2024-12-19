@@ -1,5 +1,7 @@
 export const HEIGHT_HEADER = 100;
 
+export const WALLET_PASSWORD_KEY = 'WALLET_PASSWORD';
+
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL as string;
 export const GAME_CONTRACT = process.env.NEXT_PUBLIC_GAME_CONTRACT as string;
 export const GAME_INFO_CONTRACT = process.env.NEXT_PUBLIC_GAME_INFO_CONTRACT as string;

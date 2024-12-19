@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiCopy, FiEye, FiEyeOff } from 'react-icons/fi';
 import { IoChevronBack } from 'react-icons/io5';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
@@ -11,6 +11,7 @@ import { useCopyText } from '@/hooks/useCopy';
 import { useWallet } from '@/hooks/useWallet';
 import useNotification from '@/hooks/useNotification';
 import { useAppState } from '@/modules/shared/state/app-state';
+import PasswordModal from '@/modules/shared/components/PasswordModal';
 
 const CreateAccount = () => {
   const toast = useNotification();
@@ -22,6 +23,7 @@ const CreateAccount = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { formatWalletSaved } = useWallet();
   const { setNavigated } = useAppState();
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const generateWallet = () => {
     const data = createNewWalletBySeedPhrase();
@@ -29,36 +31,32 @@ const CreateAccount = () => {
   };
 
   const onPressContinue = () => {
+    if (wallet) {
+      setShowPasswordModal(true);
+    }
+  };
+
+  const handlePasswordSubmit = (password: string) => {
     try {
-      if (wallet) {
-        setIsLoading(true);
+      setIsLoading(true);
 
-        // Connect wallet using wagmi
-        // connect({
-        //   connector: {
-        //     id: 'injected',
-        //     name: 'Created Wallet',
-        //   },
-        //   chainId: sonicBlazeChain.id,
-        // } as { connector: Connector; chainId: number });
+      const savedWallet = formatWalletSaved(wallet!, password);
 
-        const savedWallet = formatWalletSaved(wallet);
+      reactiveStorage.set('USER_CREDENTIAL', {
+        [wallet!.address]: savedWallet,
+      });
 
-        reactiveStorage.set('USER_CREDENTIAL', {
-          [wallet.address]: savedWallet,
-        });
+      reactiveStorage.set('ACTIVE_WALLET', {
+        address: wallet!.address,
+      });
 
-        reactiveStorage.set('ACTIVE_WALLET', {
-          address: wallet.address,
-        });
-
-        setIsLoading(false);
-        void router.replace('/dapp/wallet');
-      }
+      setIsLoading(false);
+      void router.replace('/dapp/wallet');
     } catch (error: any) {
       setIsLoading(false);
       toast(error.message || 'Failed to create wallet');
     }
+    setShowPasswordModal(false);
   };
 
   useEffect(() => {
@@ -160,6 +158,13 @@ const CreateAccount = () => {
           Continue
         </ButtonCustom>
       </div>
+      <PasswordModal
+        isOpen={showPasswordModal}
+        onClose={() => setShowPasswordModal(false)}
+        onSubmit={handlePasswordSubmit}
+        mode="create"
+        title="Create Password"
+      />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import NoAuthLayout from '@/layouts/AuthLayout/NoAuthLayout';
 import AuthLayout from '@/layouts/AuthLayout/AuthLayout';
 import Providers from '@/Providers';
 import { roboto } from '@/common/constants/fonts';
+import PasswordVerification from '@/components/PasswordVerification/PasswordVerification';
 
 import 'react-toastify/dist/ReactToastify.css';
 import '@/styles/globals.scss';
@@ -20,11 +21,12 @@ const ROUTE_AUTH = [
   '/dapp/transfer',
   '/dapp/import-account',
 ];
-const ROUTE_EMPTY = ['/'];
+const ROUTE_EMPTY = ['/', '/dapp/restore-vault'];
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { pathname } = router;
+  const protectedRoutes = ['/dapp/wallet', '/dapp/credential', '/dapp/account'];
 
   const getLayout = () => {
     if (ROUTE_AUTH.includes(pathname)) {
@@ -113,7 +115,11 @@ export default function App({ Component, pageProps }: AppProps) {
             font-family: ${roboto.style.fontFamily};
           }
         `}</style>
-        {getLayout()}
+        {protectedRoutes.includes(router.pathname) ? (
+          <PasswordVerification>{getLayout()}</PasswordVerification>
+        ) : (
+          getLayout()
+        )}
         <ToastContainer />
       </Providers>
     </WagmiConfig>

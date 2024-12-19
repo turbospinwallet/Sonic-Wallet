@@ -1,15 +1,13 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { useConnect } from 'wagmi';
-import type { Connector } from 'wagmi';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import { useDisplayBackButtonMiniApp } from '@/hooks/useDisplayBackButtonMiniApp';
 import { importWalletByPrivateKey, importWalletBySeedPhrase } from '@/common/utils/wallet';
 import reactiveStorage from '@/internals/reactive-storage';
 import useNotification from '@/hooks/useNotification';
-import { sonicBlazeChain } from '@/common/connectors';
 import { useWallet } from '@/hooks/useWallet';
 import type { ICWalletInfoStorage } from '@/common/interfaces';
+import { usePasswordStore } from '@/stores/passwordStore';
 
 const ImportAccount = () => {
   const { showBackButton } = useDisplayBackButtonMiniApp();
@@ -19,8 +17,8 @@ const ImportAccount = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const toast = useNotification();
-  const { connect } = useConnect();
   const { formatWalletSaved } = useWallet();
+  const { password } = usePasswordStore();
 
   useEffect(() => {
     showBackButton();
@@ -60,18 +58,10 @@ const ImportAccount = () => {
           return;
         }
 
-        connect({
-          connector: {
-            id: 'injected',
-            name: 'Imported Wallet',
-          },
-          chainId: sonicBlazeChain.id,
-        } as { connector: Connector; chainId: number });
-
         const accountNumber = Object.keys(credentials).length + 1;
 
         const walletInfo = {
-          ...formatWalletSaved(wallet),
+          ...formatWalletSaved(wallet, password as string),
           name: `Account ${accountNumber}`,
         };
 
