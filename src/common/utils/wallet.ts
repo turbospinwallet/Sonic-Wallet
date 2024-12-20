@@ -7,7 +7,7 @@ import {
   mnemonicToAccount,
   privateKeyToAccount,
 } from 'viem/accounts';
-import { sonicBlazeChain } from '@/common/connectors';
+import { sonicMainnetChain } from '@/common/connectors';
 import type { ICWalletInfoStorage } from '@/common/interfaces';
 
 export function createNewWalletBySeedPhrase(): ICWalletInfoStorage {
@@ -20,10 +20,10 @@ export function createNewWalletBySeedPhrase(): ICWalletInfoStorage {
   // Get private key from account
   const privateKey = generatePrivateKey();
 
-  // Create wallet client
-  const client = createWalletClient({
+  // Create wallet client with mainnet chain
+  createWalletClient({
     account,
-    chain: sonicBlazeChain,
+    chain: sonicMainnetChain,
     transport: http(),
   });
 
@@ -43,10 +43,10 @@ export function importWalletByPrivateKey(privateKey: string): ICWalletInfoStorag
     // Create account from private key using viem
     const account = privateKeyToAccount(formattedKey as `0x${string}`);
 
-    // Create wallet client with Sonic Blaze chain
-    const client = createWalletClient({
+    // Create wallet client with mainnet chain
+    createWalletClient({
       account,
-      chain: sonicBlazeChain,
+      chain: sonicMainnetChain,
       transport: http(),
     });
 

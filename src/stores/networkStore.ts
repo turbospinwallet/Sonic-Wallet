@@ -7,7 +7,7 @@ interface NetworkStore {
 }
 
 export const useNetworkStore = create<NetworkStore>((set) => ({
-  currentChainId: sonicBlazeChain.id, // Default to testnet
+  currentChainId: sonicMainnetChain.id, // Changed from sonicBlazeChain.id to sonicMainnetChain.id
   setCurrentChainId: (chainId: number) => set({ currentChainId: chainId }),
 }));
 

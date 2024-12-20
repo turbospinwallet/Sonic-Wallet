@@ -26,13 +26,14 @@ const ROUTE_EMPTY = ['/', '/dapp/restore-vault'];
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { pathname } = router;
-  const protectedRoutes = ['/dapp/wallet', '/dapp/credential', '/dapp/account'];
 
   const getLayout = () => {
     if (ROUTE_AUTH.includes(pathname)) {
       return (
         <AuthLayout>
-          <Component {...pageProps} />
+          <PasswordVerification>
+            <Component {...pageProps} />
+          </PasswordVerification>
         </AuthLayout>
       );
     }
@@ -115,11 +116,7 @@ export default function App({ Component, pageProps }: AppProps) {
             font-family: ${roboto.style.fontFamily};
           }
         `}</style>
-        {protectedRoutes.includes(router.pathname) ? (
-          <PasswordVerification>{getLayout()}</PasswordVerification>
-        ) : (
-          getLayout()
-        )}
+        {getLayout()}
         <ToastContainer />
       </Providers>
     </WagmiConfig>
