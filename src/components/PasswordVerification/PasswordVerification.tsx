@@ -31,6 +31,8 @@ const PasswordVerification: React.FC<Props> = ({ children }) => {
     }
   };
 
+  console.log('password', password);
+
   if (!password) {
     return (
       <PasswordModal

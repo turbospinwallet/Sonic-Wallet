@@ -15,7 +15,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
 
   useEffect(() => {
     if (!address) {
-      void router.replace('/');
+      void router.replace('/dapp');
       return;
     }
     setIsLoaded(true);
