@@ -63,4 +63,4 @@ export const getWagmiConfig = (defaultChainId: number) => {
 };
 
 // Export a default configuration
-export const wagmiConfig = getWagmiConfig(sonicBlazeChain.id);
+export const wagmiConfig = getWagmiConfig(sonicMainnetChain.id);

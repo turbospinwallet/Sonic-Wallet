@@ -12,6 +12,7 @@ import { useWallet } from '@/hooks/useWallet';
 import useNotification from '@/hooks/useNotification';
 import { useAppState } from '@/modules/shared/state/app-state';
 import PasswordModal from '@/modules/shared/components/PasswordModal';
+import { usePasswordStore } from '@/stores/passwordStore';
 
 const CreateAccount = () => {
   const toast = useNotification();
@@ -24,6 +25,7 @@ const CreateAccount = () => {
   const { formatWalletSaved } = useWallet();
   const { setNavigated } = useAppState();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const { setPassword } = usePasswordStore();
 
   const generateWallet = () => {
     const data = createNewWalletBySeedPhrase();
@@ -51,6 +53,7 @@ const CreateAccount = () => {
       });
 
       setIsLoading(false);
+      setPassword(password);
       void router.replace('/dapp/wallet');
     } catch (error: any) {
       setIsLoading(false);
