@@ -42,7 +42,8 @@ export const useWallet = () => {
   const decryptWalletData = useCallback(
     (wallet: SavedUserCredential | undefined, password: string) => {
       if (!wallet) return null;
-
+      console.log('wallet', wallet);
+      console.log('decrypt', decrypt(wallet.privateKey!, password));
       try {
         return {
           ...wallet,

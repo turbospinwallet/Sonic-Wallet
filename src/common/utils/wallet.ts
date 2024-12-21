@@ -1,17 +1,10 @@
 import { createWalletClient, http } from 'viem';
 import type { HDAccount } from 'viem/accounts';
-import {
-  english,
-  generateMnemonic,
-  generatePrivateKey,
-  mnemonicToAccount,
-  privateKeyToAccount,
-} from 'viem/accounts';
+import { english, generateMnemonic, mnemonicToAccount, privateKeyToAccount } from 'viem/accounts';
 import { sonicMainnetChain } from '@/common/connectors';
 import type { ICWalletInfoStorage } from '@/common/interfaces';
 import type { TokenInfo } from '@/types/token';
 import reactiveStorage from '@/internals/reactive-storage';
-
 export function createNewWalletBySeedPhrase(): ICWalletInfoStorage {
   // Generate mnemonic with English wordlist
   const mnemonic = generateMnemonic(english);
@@ -19,8 +12,7 @@ export function createNewWalletBySeedPhrase(): ICWalletInfoStorage {
   // Create account from mnemonic
   const account = mnemonicToAccount(mnemonic) as HDAccount;
 
-  // Get private key from account
-  const privateKey = generatePrivateKey();
+  const privateKey = `0x${Buffer.from(account.getHdKey().privateKey!).toString('hex')}`;
 
   // Create wallet client with mainnet chain
   createWalletClient({
@@ -73,7 +65,7 @@ export function importWalletBySeedPhrase(input: string): ICWalletInfoStorage {
 
     // Try as mnemonic
     const account = mnemonicToAccount(input) as HDAccount;
-    const privateKey = generatePrivateKey();
+    const privateKey = `0x${Buffer.from(account.getHdKey().privateKey!).toString('hex')}`;
 
     return {
       address: account.address,
@@ -100,20 +92,6 @@ export function importToken(tokenInfo: TokenInfo, chainId: number) {
       [formattedAddress]: tokenInfo,
     },
   });
-}
-
-// Helper function to convert bytes32 to string
-function hexToString(hex: string): string {
-  try {
-    // Remove '0x' prefix and any trailing zeros
-    const cleaned = hex.replace('0x', '').replace(/00+$/, '');
-    // Convert hex to string
-    const str = Buffer.from(cleaned, 'hex').toString();
-    // Remove any null characters
-    return str.replace(/\0/g, '');
-  } catch (error) {
-    return '';
-  }
 }
 
 export function getImportedTokens(chainId: number): TokenInfo[] {
