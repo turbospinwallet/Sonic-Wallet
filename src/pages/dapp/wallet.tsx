@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Bars3Icon, DocumentDuplicateIcon, QrCodeIcon } from '@heroicons/react/24/solid';
-import { FiChevronDown, FiDownload, FiSend } from 'react-icons/fi';
-import BigNumber from 'bignumber.js';
+import { FiChevronDown, FiDownload, FiPlus, FiSend } from 'react-icons/fi';
 import { useSwitchNetwork } from 'wagmi';
 import clsx from 'clsx';
 import { useAppState } from '@/modules/shared/state/app-state';
@@ -11,13 +10,14 @@ import { useWallet } from '@/hooks/useWallet';
 import { useDisplayBackButtonMiniApp } from '@/hooks/useDisplayBackButtonMiniApp';
 import { useCoins } from '@/hooks/useCoins';
 import { formatNumber } from '@/common/utils/number';
-import { MAIN_TOKEN, sonicBlazeChain, sonicMainnetChain } from '@/common/connectors';
+import { sonicBlazeChain, sonicMainnetChain } from '@/common/connectors';
 import { useCopyText } from '@/hooks/useCopy';
 import { useTelegram } from '@/hooks/useTelegram';
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import QRCodeModal from '@/modules/wallet/components/QRCodeModal';
 import { useNetworkStore } from '@/stores/networkStore';
 import DropdownHover from '@/components/DropdownCustom/DropdownHover';
+import ImportTokensModal from '@/modules/wallet/components/ImportTokensModal';
+import { TokenIcon } from '@/modules/shared/components/TokenIcon';
 
 const Wallet = () => {
   const router = useRouter();
@@ -25,10 +25,11 @@ const Wallet = () => {
   const { address, accountName } = useWallet();
   const { userInfo, params } = useTelegram();
   const { claimInfo, navigated, setNavigated } = useAppState();
-  const { data: coins } = useCoins(address);
+  const { data: coins, refetch } = useCoins(address);
   const [showQRModal, setShowQRModal] = React.useState(false);
   const { switchNetwork } = useSwitchNetwork();
   const { currentChainId, setCurrentChainId } = useNetworkStore();
+  const [showImportModal, setShowImportModal] = useState(false);
 
   const networks = [
     {
@@ -40,30 +41,7 @@ const Wallet = () => {
       label: 'Testnet',
     },
   ];
-
-  function getTokenPrice(token: any) {
-    if (token && token.usd) {
-      const totalValueUSD = new BigNumber(token.usd);
-      const balance = new BigNumber(token.balance).dividedBy(new BigNumber(10).pow(token.decimals));
-      const pricePerToken = totalValueUSD.dividedBy(balance);
-      return pricePerToken.toString();
-    } else {
-      return 0;
-    }
-  }
   const { hideBackButton } = useDisplayBackButtonMiniApp();
-  const tokens = useMemo(() => {
-    return coins?.map((item) => {
-      const price = getTokenPrice(item);
-      const token = {
-        ...item,
-        iconURL: item?.symbol === MAIN_TOKEN.symbol ? '/images/s.png' : '/images/logo.png',
-        price,
-        balance: formatNumber(item.balance, 4),
-      };
-      return token;
-    });
-  }, [coins]);
 
   const handleNetworkChange = (chainId: number) => {
     setCurrentChainId(chainId);
@@ -72,7 +50,7 @@ const Wallet = () => {
 
   const renderHeader = () => {
     return (
-      <div className="flex items-center justify-between px-4 py-3">
+      <div className="flex items-center justify-between py-3">
         {/* Left section */}
         <div className="flex items-center space-x-4">
           <button
@@ -175,75 +153,26 @@ const Wallet = () => {
       </div>
     );
   };
-  const renderTokensList = () => {
-    return (
-      <div className="">
-        <p className="font-bold text-xl mb-4">Tokens</p>
-        <div className="flex flex-col gap-3">
-          {tokens.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className="p-4 bg-white/20 flex gap-2 rounded-lg text-sm"
-              >
-                {item.iconURL ? (
-                  <Image
-                    src={item.iconURL}
-                    alt={item.symbol}
-                    width={32}
-                    height={32}
-                  />
-                ) : null}
-                <div className="flex-1">
-                  <p className="">{item.symbol}</p>
-                  <p className="">
-                    {item.balance}
-                    {Number(item.price) ? ` . $${formatNumber(item.price as number)}` : null}
-                  </p>
-                </div>
-                {/* <div className="text-right">
-									<p className="">$ {formatNumber(item.usd as any) || 0}</p>
-									<p
-										className={clsx(
-											"font-bold",
-											item.pricePercentChange24h?.includes("-")
-												? "text-red-1"
-												: "text-green-1",
-										)}
-									>
-										{!Number(item.pricePercentChange24h)
-											? null
-											: `${formatNumber(item.pricePercentChange24h as any)}%`}
-									</p>
-								</div> */}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  };
 
-  const renderAction = () => {
+  const renderGameSection = () => {
     return (
-      <div className="flex flex-col gap-3">
-        <div className="grid grid-cols-2 gap-3">
-          <ButtonCustom
-            color="primary"
-            className="w-full font-bold"
-            onClick={() => setShowQRModal(true)}
-          >
-            <FiDownload size={28} />
-            Deposit
-          </ButtonCustom>
-          <ButtonCustom
-            color="primary"
-            className="w-full font-bold"
-            onClick={() => void router.replace('/dapp/transfer')}
-          >
-            <FiSend size={28} />
-            Transfer
-          </ButtonCustom>
+      <div>
+        <div className="bg-gradient-to-r from-primary/20 to-primary/5 rounded-lg p-4">
+          <div className="flex items-center gap-4">
+            <Image
+              src="/images/logo.png"
+              alt="game-logo"
+              width={48}
+              height={48}
+            />
+            <div className="flex-1">
+              <h3 className="font-bold text-neutral">Spin Game</h3>
+              <p className="text-xs text-neutral/70">Experience the thrill of our upcoming game</p>
+            </div>
+            <div className="bg-primary/20 px-3 py-1 rounded-full">
+              <span className="text-primary text-sm font-medium">Coming Soon</span>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -269,43 +198,59 @@ const Wallet = () => {
   }, [address, router]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-secondary">
+    <div className="bg-secondary px-6 flex-1 pb-6 ">
       {renderHeader()}
-      <div className="flex flex-col px-6">
-        {renderBalance()}
-        <div className="mt-8">
-          <div className="flex justify-between items-center mb-4">
-            <p className="text-neutral font-bold">Assets</p>
-            <button
-              className="flex items-center gap-1 text-primary"
-              onClick={() => setShowQRModal(true)}
+      {renderBalance()}
+      {renderGameSection()}
+      <div className="mt-8">
+        <div className="flex justify-between items-center mb-4">
+          <p className="text-neutral font-bold">Assets</p>
+          <button
+            className="flex items-center gap-1 text-primary"
+            onClick={() => setShowQRModal(true)}
+          >
+            <QrCodeIcon className="w-[24px]" />
+            <span className="text-sm">Receive</span>
+          </button>
+        </div>
+        <div className="flex flex-col gap-3">
+          {coins.map((coin) => (
+            <div
+              key={coin.type}
+              onClick={() =>
+                router.push({
+                  pathname: `/dapp/token/${currentChainId}/${coin.type}`,
+                })
+              }
+              className="flex items-center gap-3 p-4 bg-neutral/5 rounded-lg cursor-pointer hover:bg-neutral/10"
             >
-              <QrCodeIcon className="w-[24px]" />
-              <span className="text-sm">Receive</span>
-            </button>
-          </div>
-          <div className="flex flex-col gap-3">
-            {coins.map((coin) => (
-              <div
-                key={coin.type}
-                className="flex items-center gap-3 p-4 bg-neutral/5 rounded-lg"
-              >
-                {coin.iconURL && (
-                  <Image
-                    src={coin.iconURL}
-                    alt={coin.symbol}
-                    width={32}
-                    height={32}
-                  />
-                )}
-                <div className="flex-1">
-                  <p className="text-neutral font-bold">{coin.symbol}</p>
-                  <p className="text-sm text-neutral/70">{formatNumber(coin.balance, 4)}</p>
-                </div>
-                <p className="text-neutral">${formatNumber(coin.usd || 0)}</p>
+              <div className="relative w-8 h-8">
+                <TokenIcon
+                  symbol={coin.symbol}
+                  chainId={currentChainId}
+                  size={32}
+                />
               </div>
-            ))}
-          </div>
+              <div className="flex-1">
+                <p className="text-neutral font-bold">{coin.symbol}</p>
+                <p className="text-sm text-neutral/70">{formatNumber(coin.balance, 4)}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-neutral">${formatNumber(coin.usd || 0)}</p>
+                {coin.pricePercentChange24h && (
+                  <p
+                    className={clsx(
+                      'text-xs',
+                      Number(coin.pricePercentChange24h) >= 0 ? 'text-green-500' : 'text-red-500'
+                    )}
+                  >
+                    {Number(coin.pricePercentChange24h) >= 0 ? '+' : ''}
+                    {formatNumber(coin.pricePercentChange24h, 2)}%
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -313,6 +258,22 @@ const Wallet = () => {
         isOpen={showQRModal}
         onClose={() => setShowQRModal(false)}
         address={address || ''}
+      />
+
+      <button
+        onClick={() => setShowImportModal(true)}
+        className="flex mt-2 items-center gap-2 px-4 py-2 text-primary hover:bg-primary/10 rounded-lg"
+      >
+        <FiPlus size={20} />
+        Import Tokens
+      </button>
+
+      <ImportTokensModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        onImportSuccess={() => {
+          refetch();
+        }}
       />
     </div>
   );

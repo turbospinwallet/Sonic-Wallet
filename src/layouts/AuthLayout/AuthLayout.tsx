@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import clsx from 'clsx';
+import BottomTabs from '../BottomTabs/BottomTabs';
 import { useWallet } from '@/hooks/useWallet';
 import { usePriceStore } from '@/stores/priceStore';
 
@@ -7,11 +9,14 @@ interface AuthLayoutProps {
   children: React.ReactNode;
 }
 
+const ROUTES_TABS = ['/dapp/wallet', '/dapp/coming-soon'];
+
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   const router = useRouter();
   const { address } = useWallet();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const fetchPrices = usePriceStore((state) => state.fetchPrices);
+  const showTabs = ROUTES_TABS.includes(router.pathname);
 
   useEffect(() => {
     if (!address) {
@@ -35,7 +40,12 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
     return null;
   }
 
-  return <>{children}</>;
+  return (
+    <div className={clsx('relative min-h-screen flex flex-col', showTabs && 'pb-[69px]')}>
+      {children}
+      {showTabs && <BottomTabs />}
+    </div>
+  );
 };
 
 export default AuthLayout;

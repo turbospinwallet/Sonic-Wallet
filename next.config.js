@@ -18,7 +18,6 @@ const nextConfig = {
   //   unoptimized: true,
   // },
   images: {
-    domains: ['i.ibb.co'],
     remotePatterns: [
       {
         protocol: 'https',

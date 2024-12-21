@@ -32,10 +32,8 @@ const Account = () => {
   }, [forceUpdate]);
 
   const tokenInfo = useMemo(() => {
-    const tokens = data?.map((item) => {
-      return `${formatNumber(item.balance, 4)} ${item.symbol}`;
-    });
-    return tokens?.join(' | ');
+    const tokenNative = data?.find((item) => item.type === 'native');
+    return `${formatNumber(tokenNative?.balance, 4)} ${tokenNative?.symbol}`;
   }, [data]);
 
   const onLogout = () => {

@@ -1,5 +1,6 @@
 import type { StorageKey } from 'src/packages/reactive-storage';
 import { createStorageOption } from 'src/packages/reactive-storage';
+import type { ImportedTokens } from '@/types/token';
 
 export interface SavedUserCredential {
   address: string;
@@ -29,6 +30,16 @@ export const REFERRAL: StorageKey<string> = createStorageOption({
 });
 
 export const CHECK_COMPLETE_TASK_DELAY: StorageKey<Record<string, number>> = createStorageOption({
+  deserialize: true,
+  persistent: false,
+});
+
+export const IMPORTED_TOKENS: StorageKey<ImportedTokens> = createStorageOption({
+  deserialize: true,
+  persistent: false,
+});
+
+export const SELECTED_NETWORK: StorageKey<number> = createStorageOption({
   deserialize: true,
   persistent: false,
 });

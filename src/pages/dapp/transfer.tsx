@@ -10,10 +10,10 @@ import { useCoins } from '@/hooks/useCoins';
 import { useCopyText } from '@/hooks/useCopy';
 import useNotification from '@/hooks/useNotification';
 
-import { sonicBlazeChain } from '@/common/connectors';
 import { erc20ABI } from '@/common/abi/erc20';
 import TransferConfirmModal from '@/modules/transfer/components/TransferConfirmModal';
 import reactiveStorage from '@/internals/reactive-storage';
+import { getChainConfig, useNetworkStore } from '@/stores/networkStore';
 
 const Transfer = () => {
   const router = useRouter();
@@ -22,18 +22,17 @@ const Transfer = () => {
   const { data: tokens } = useCoins(address);
   const { copyText } = useCopyText();
   const toast = useNotification();
+  const { currentChainId } = useNetworkStore();
+  const { token: preSelectedToken } = router.query;
 
   const [receiverAddress, setReceiverAddress] = useState('');
-  const [selectedToken, setSelectedToken] = useState('');
+  const [selectedToken, setSelectedToken] = useState((preSelectedToken as string) || '');
   const [amount, setAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
 
   const selectedTokenInfo = tokens?.find((token) => token.symbol === selectedToken);
-
-  console.log('selectedTokenInfo');
-  console.log(selectedTokenInfo);
 
   const balance = selectedTokenInfo ? Number(selectedTokenInfo.balance) : 0;
 
@@ -67,9 +66,12 @@ const Transfer = () => {
 
       const account = privateKeyToAccount(privateKey as `0x${string}`);
 
+      // Get chain config based on selected network
+      const chainConfig = getChainConfig(currentChainId);
+
       const walletClient = createWalletClient({
         account,
-        chain: sonicBlazeChain,
+        chain: chainConfig,
         transport: http(),
       });
 
@@ -81,7 +83,6 @@ const Transfer = () => {
         : `0x${receiverAddress}`;
 
       if (selectedTokenInfo.type === 'native') {
-        // Or however you identify native token
         // Native token transfer
         hash = await walletClient.sendTransaction({
           to: formattedReceiverAddress as `0x${string}`,
@@ -105,9 +106,9 @@ const Transfer = () => {
         });
       }
 
-      // Wait for transaction confirmation
+      // Update public client to use selected network
       const publicClient = createPublicClient({
-        chain: sonicBlazeChain,
+        chain: chainConfig,
         transport: http(),
       });
 
@@ -238,7 +239,7 @@ const Transfer = () => {
         <ButtonCustom
           color="secondary"
           className="w-full font-bold"
-          onClick={() => router.push('/wallet')}
+          onClick={() => router.back()}
           disabled={isLoading}
         >
           Cancel
