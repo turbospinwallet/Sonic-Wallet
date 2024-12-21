@@ -2,13 +2,11 @@ import React, { useEffect, useMemo } from 'react';
 import { FiCopy, FiEye, FiEyeOff, FiInfo } from 'react-icons/fi';
 import { IoChevronBack } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
-import useNotification from '@/hooks/useNotification';
 import { useDisplayBackButtonMiniApp } from '@/hooks/useDisplayBackButtonMiniApp';
 import { useWallet } from '@/hooks/useWallet';
 import { useCopyText } from '@/hooks/useCopy';
 
 const Credential = () => {
-  const toast = useNotification();
   const { showBackButton } = useDisplayBackButtonMiniApp();
   const [showSeed, setShowSeed] = React.useState<number[]>([]);
   const { wallet, password } = useWallet();

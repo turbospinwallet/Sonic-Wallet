@@ -139,7 +139,7 @@ const Account = () => {
         </div>
       </div>
 
-      <div className="gap-3 flex flex-col w-full">
+      <div className="gap-3 flex flex-col w-full mt-4">
         <ButtonCustom
           color="primary"
           className="w-full font-bold"

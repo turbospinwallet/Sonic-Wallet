@@ -29,8 +29,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { pathname } = router;
 
-  console.log(pathname);
-
   const getLayout = () => {
     if (ROUTE_AUTH.includes(pathname)) {
       return (
