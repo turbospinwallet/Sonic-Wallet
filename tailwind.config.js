@@ -2,6 +2,9 @@
 
 // tailwind.config.js
 const { fontFamily } = require('tailwindcss/defaultTheme');
+const colors = require('tailwindcss/colors');
+
+console.log(colors);
 
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}', './public/**/*.html'],
@@ -15,21 +18,14 @@ module.exports = {
         '1/2': '50%',
       },
       colors: {
+        ...colors,
         'color-bg': '#1D1C24',
         primary: '#006ccd',
         'primary-2': '#918DEF',
         'primary-3': '#1D1C24',
         'primary-4': '#1D1C24',
-        'color-bg-main': '#0F1016',
         secondary: '#0c1a32',
-        green: '#00FF47',
-        red: '#D3393A',
         'red-1': '#FF3E3E',
-        pink: '#C385FF',
-        yellow: '#FFF61A',
-        'title-dog': 'rgba(15, 16, 22, 0.82)',
-        blue: '#07FFFF',
-        backgroundModal: '#2A2D3D',
         'black-1': '#0F1016',
         'black-2': '#1C1D25',
         'black-3': '#151515',
