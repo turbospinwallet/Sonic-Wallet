@@ -9,6 +9,8 @@ import {
 } from 'viem/accounts';
 import { sonicMainnetChain } from '@/common/connectors';
 import type { ICWalletInfoStorage } from '@/common/interfaces';
+import type { TokenInfo } from '@/types/token';
+import reactiveStorage from '@/internals/reactive-storage';
 
 export function createNewWalletBySeedPhrase(): ICWalletInfoStorage {
   // Generate mnemonic with English wordlist
@@ -82,4 +84,57 @@ export function importWalletBySeedPhrase(input: string): ICWalletInfoStorage {
   } catch (error) {
     throw new Error('Invalid seed phrase or private key format');
   }
+}
+
+export function importToken(tokenInfo: TokenInfo, chainId: number) {
+  const formattedAddress = tokenInfo.address.startsWith('0x')
+    ? tokenInfo.address
+    : `0x${tokenInfo.address}`;
+
+  // Save to storage
+  const importedTokens = reactiveStorage.get('IMPORTED_TOKENS') || {};
+  reactiveStorage.set('IMPORTED_TOKENS', {
+    ...importedTokens,
+    [chainId]: {
+      ...(importedTokens[chainId] || {}),
+      [formattedAddress]: tokenInfo,
+    },
+  });
+}
+
+// Helper function to convert bytes32 to string
+function hexToString(hex: string): string {
+  try {
+    // Remove '0x' prefix and any trailing zeros
+    const cleaned = hex.replace('0x', '').replace(/00+$/, '');
+    // Convert hex to string
+    const str = Buffer.from(cleaned, 'hex').toString();
+    // Remove any null characters
+    return str.replace(/\0/g, '');
+  } catch (error) {
+    return '';
+  }
+}
+
+export function getImportedTokens(chainId: number): TokenInfo[] {
+  const importedTokens = reactiveStorage.get('IMPORTED_TOKENS');
+  if (!importedTokens || !importedTokens[chainId]) {
+    return [];
+  }
+  return Object.values(importedTokens[chainId]);
+}
+
+export function removeImportedToken(tokenAddress: string, chainId: number): void {
+  const importedTokens = reactiveStorage.get('IMPORTED_TOKENS');
+  if (!importedTokens || !importedTokens[chainId]) {
+    return;
+  }
+
+  const chainTokens = importedTokens[chainId];
+  delete chainTokens[tokenAddress];
+
+  reactiveStorage.set('IMPORTED_TOKENS', {
+    ...importedTokens,
+    [chainId]: chainTokens,
+  });
 }
