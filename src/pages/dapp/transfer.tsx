@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FiCopy } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import { createPublicClient, createWalletClient, http, parseEther, parseUnits } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
@@ -7,7 +6,6 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import { useDisplayBackButtonMiniApp } from '@/hooks/useDisplayBackButtonMiniApp';
 import { formatAddress, useWallet } from '@/hooks/useWallet';
 import { useCoins } from '@/hooks/useCoins';
-import { useCopyText } from '@/hooks/useCopy';
 import useNotification from '@/hooks/useNotification';
 
 import { erc20ABI } from '@/common/abi/erc20';
@@ -20,7 +18,6 @@ const Transfer = () => {
   const { showBackButton } = useDisplayBackButtonMiniApp();
   const { address, wallet } = useWallet();
   const { data: tokens } = useCoins(address);
-  const { copyText } = useCopyText();
   const toast = useNotification();
   const { currentChainId } = useNetworkStore();
   const { token: preSelectedToken } = router.query;
@@ -153,12 +150,6 @@ const Transfer = () => {
               placeholder="Enter Address"
               onFocus={() => setShowAccountDropdown(true)}
             />
-            <button
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral hover:text-primary"
-              onClick={() => copyText(receiverAddress)}
-            >
-              <FiCopy size={24} />
-            </button>
             {showAccountDropdown && importedAccounts.length > 0 && (
               <div className="absolute z-10 w-full mt-1 bg-secondary border border-neutral/20 rounded-md shadow-lg">
                 {importedAccounts.map((account) => (

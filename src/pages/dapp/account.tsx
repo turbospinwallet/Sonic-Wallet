@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useMemo, useState } from 'react';
-import { MdExitToApp } from 'react-icons/md';
+import { MdDelete, MdExitToApp } from 'react-icons/md';
 import { HiOutlinePencil } from 'react-icons/hi2';
 import { RiSeedlingLine } from 'react-icons/ri';
 import { TbChevronRight } from 'react-icons/tb';
@@ -13,13 +13,16 @@ import { useCoins } from '@/hooks/useCoins';
 import EditAccountNameModal from '@/modules/account/components/EditAccountNameModal';
 import reactiveStorage from '@/internals/reactive-storage';
 import { formatNumber } from '@/common/utils/number';
+import useNotification from '@/hooks/useNotification';
 
 const Account = () => {
   const { showBackButton } = useDisplayBackButtonMiniApp();
-  const { clearWallet, address, accountName, updateAccountName, switchWallet } = useWallet();
+  const { clearWallet, address, accountName, updateAccountName, switchWallet, removeAccount } =
+    useWallet();
   const { data, refetch } = useCoins(address);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [forceUpdate, setForceUpdate] = useState(0);
+  const [localForceUpdate, setLocalForceUpdate] = useState(0);
+  const toast = useNotification();
 
   const router = useRouter();
 
@@ -29,7 +32,7 @@ const Account = () => {
       address,
       name: details.name,
     }));
-  }, [forceUpdate]);
+  }, [localForceUpdate]);
 
   const tokenInfo = useMemo(() => {
     const tokenNative = data?.find((item) => item.type === 'native');
@@ -60,8 +63,26 @@ const Account = () => {
 
   const handleUpdateName = (name: string) => {
     updateAccountName(name);
-    setForceUpdate((prev) => prev + 1);
+    setLocalForceUpdate((prev) => prev + 1);
     setShowEditModal(false);
+  };
+
+  const handleRemoveAccount = (addressToRemove: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    try {
+      if (accounts.length <= 1) {
+        toast('Cannot remove the last account', 'error');
+        return;
+      }
+
+      removeAccount(addressToRemove);
+      setLocalForceUpdate((prev) => prev + 1);
+      refetch();
+      toast('Account removed successfully', 'success');
+    } catch (error: any) {
+      toast(error.message || 'Failed to remove account', 'error');
+    }
   };
 
   return (
@@ -96,21 +117,31 @@ const Account = () => {
                 <p className="text-xs text-neutral/70">{formatAddress(account.address)}</p>
                 {address === account.address && <p className="text-sm text-primary">{tokenInfo}</p>}
               </div>
-              {address === account.address && (
-                <button
-                  type="button"
-                  className="absolute top-1/2 -translate-y-1/2 right-2"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowEditModal(true);
-                  }}
-                >
-                  <HiOutlinePencil
-                    size={20}
-                    className="mr-2"
-                  />
-                </button>
-              )}
+              <div className="absolute top-1/2 -translate-y-1/2 right-2 flex gap-2">
+                {address === account.address && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowEditModal(true);
+                    }}
+                  >
+                    <HiOutlinePencil
+                      size={20}
+                      className="text-neutral hover:text-primary"
+                    />
+                  </button>
+                )}
+                {accounts.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={(e) => handleRemoveAccount(account.address, e)}
+                    className="text-neutral hover:text-red-500"
+                  >
+                    <MdDelete size={20} />
+                  </button>
+                )}
+              </div>
             </div>
           ))}
 

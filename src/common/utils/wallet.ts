@@ -5,6 +5,8 @@ import { sonicMainnetChain } from '@/common/connectors';
 import type { ICWalletInfoStorage } from '@/common/interfaces';
 import type { TokenInfo } from '@/types/token';
 import reactiveStorage from '@/internals/reactive-storage';
+import { NETWORK_ICONS } from '@/common/constants/tokens';
+
 export function createNewWalletBySeedPhrase(): ICWalletInfoStorage {
   // Generate mnemonic with English wordlist
   const mnemonic = generateMnemonic(english);
@@ -116,3 +118,8 @@ export function removeImportedToken(tokenAddress: string, chainId: number): void
     [chainId]: chainTokens,
   });
 }
+
+export const getNetworkIcon = (chainId: number): string => {
+  // @ts-expect-error ignore build
+  return NETWORK_ICONS[chainId] || '/images/networks/sonic.svg';
+};

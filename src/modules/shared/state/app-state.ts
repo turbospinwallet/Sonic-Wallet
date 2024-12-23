@@ -12,8 +12,6 @@ export interface AppState {
   shouldRefreshBalance: number | null;
   refreshUserClaimInfo: () => void;
   refreshBalance: () => void;
-  navigated: boolean;
-  setNavigated: (navigated: boolean) => void;
 }
 
 export const useAppState = create<AppState>((set) => ({
@@ -27,7 +25,6 @@ export const useAppState = create<AppState>((set) => ({
   userClaimInfo: undefined,
   shouldRefreshUserClaimInfo: null,
   shouldRefreshBalance: null,
-  navigated: false,
   setGameInfo: (gameInfo) => {
     set({
       gameInfo,
@@ -51,11 +48,6 @@ export const useAppState = create<AppState>((set) => ({
   setClaimInfo: (claimInfo) => {
     set({
       claimInfo,
-    });
-  },
-  setNavigated: (navigated) => {
-    set({
-      navigated,
     });
   },
 }));
