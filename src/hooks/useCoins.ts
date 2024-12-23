@@ -4,7 +4,9 @@ import { erc20ABI } from 'wagmi';
 import { COIN_ID_MAP, usePriceStore } from '@/stores/priceStore';
 import { getChainConfig, useNetworkStore } from '@/stores/networkStore';
 import { getImportedTokens } from '@/common/utils/wallet';
+import { CHAIN_TOKENS } from '@/common/constants/tokens';
 import type { TokenInfo } from '@/types/token';
+import { NETWORKS } from '@/common/connectors';
 
 /**
  * get coins
@@ -110,28 +112,26 @@ export const useCoins = (address: string | undefined) => {
   }, [address, currentChainId, fetchBalance]);
 
   const formattedData = useMemo(() => {
-    // Get imported tokens for current chain - moved outside balance check
+    // Get imported tokens for current chain
     const importedTokens = getImportedTokens(currentChainId);
 
     const formattedBalance = balance ? formatUnits(balance, 18) : '0';
-    const priceData = prices[COIN_ID_MAP.S];
+
+    // Get native token config for current chain
+    const nativeToken =
+      CHAIN_TOKENS[currentChainId as keyof typeof CHAIN_TOKENS] ||
+      CHAIN_TOKENS[NETWORKS.SONIC_MAINNET.id];
+    const priceData = prices[COIN_ID_MAP[nativeToken.symbol]];
     const usdPrice = priceData?.usd || 0;
     const usdValue = (Number(formattedBalance) * usdPrice).toString();
     const priceChange = priceData?.usd_24h_change?.toString() || '0';
 
     return [
       {
-        type: 'native',
-        address: '',
-        symbol: 'S',
+        ...nativeToken,
         balance: formattedBalance,
-        decimals: 18,
-        isVerified: true,
-        iconURL: '/images/tokens/s.png',
         usd: usdValue,
         pricePercentChange24h: priceChange,
-        wrappedChain: 'sonicblaze',
-        bridge: 'sonicblaze',
       },
       // Add imported tokens with their actual balances
       ...importedTokens.map((token) => ({

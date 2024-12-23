@@ -10,7 +10,6 @@ import { useWallet } from '@/hooks/useWallet';
 import { useDisplayBackButtonMiniApp } from '@/hooks/useDisplayBackButtonMiniApp';
 import { useCoins } from '@/hooks/useCoins';
 import { formatNumber } from '@/common/utils/number';
-import { sonicBlazeChain, sonicMainnetChain } from '@/common/connectors';
 import { useCopyText } from '@/hooks/useCopy';
 import { useTelegram } from '@/hooks/useTelegram';
 import QRCodeModal from '@/modules/wallet/components/QRCodeModal';
@@ -18,29 +17,23 @@ import { useNetworkStore } from '@/stores/networkStore';
 import DropdownHover from '@/components/DropdownCustom/DropdownHover';
 import ImportTokensModal from '@/modules/wallet/components/ImportTokensModal';
 import { TokenIcon } from '@/modules/shared/components/TokenIcon';
+import { AVAILABLE_NETWORKS } from '@/common/connectors';
+import { getNetworkIcon } from '@/common/utils/wallet';
 
 const Wallet = () => {
   const router = useRouter();
   const { copyText } = useCopyText();
   const { address, accountName } = useWallet();
   const { userInfo, params } = useTelegram();
-  const { claimInfo, navigated, setNavigated } = useAppState();
+  const { claimInfo } = useAppState();
   const { data: coins, refetch } = useCoins(address);
   const [showQRModal, setShowQRModal] = React.useState(false);
   const { switchNetwork } = useSwitchNetwork();
   const { currentChainId, setCurrentChainId } = useNetworkStore();
   const [showImportModal, setShowImportModal] = useState(false);
 
-  const networks = [
-    {
-      ...sonicMainnetChain,
-      label: 'Mainnet',
-    },
-    {
-      ...sonicBlazeChain,
-      label: 'Testnet',
-    },
-  ];
+  const networks = AVAILABLE_NETWORKS;
+
   const { hideBackButton } = useDisplayBackButtonMiniApp();
 
   const handleNetworkChange = (chainId: number) => {
@@ -77,7 +70,7 @@ const Wallet = () => {
             menu={
               <div className="flex items-center text-sm text-neutral bg-neutral/5 px-3 py-1.5 rounded-lg">
                 <Image
-                  src="/images/sonic-black.svg"
+                  src={getNetworkIcon(currentChainId)}
                   alt="network"
                   width={16}
                   height={16}
@@ -104,7 +97,7 @@ const Wallet = () => {
                   onClick={() => handleNetworkChange(network.id)}
                 >
                   <Image
-                    src="/images/sonic-black.svg"
+                    src={getNetworkIcon(network.id)}
                     alt={network.name}
                     width={16}
                     height={16}
@@ -181,15 +174,6 @@ const Wallet = () => {
   useEffect(() => {
     hideBackButton();
   }, []);
-
-  useEffect(() => {
-    if (params?.type && !navigated) {
-      setNavigated(true);
-      setTimeout(() => {
-        void router.push(`/claim?type=${params.type}`);
-      }, 700);
-    }
-  }, [params?.type]);
 
   useEffect(() => {
     if (!address) {

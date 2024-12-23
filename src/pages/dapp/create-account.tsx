@@ -10,7 +10,6 @@ import { useDisplayBackButtonMiniApp } from '@/hooks/useDisplayBackButtonMiniApp
 import { useCopyText } from '@/hooks/useCopy';
 import { useWallet } from '@/hooks/useWallet';
 import useNotification from '@/hooks/useNotification';
-import { useAppState } from '@/modules/shared/state/app-state';
 import PasswordModal from '@/modules/shared/components/PasswordModal';
 import { usePasswordStore } from '@/stores/passwordStore';
 
@@ -23,7 +22,6 @@ const CreateAccount = () => {
   const { copyText } = useCopyText();
   const [isLoading, setIsLoading] = React.useState(false);
   const { formatWalletSaved } = useWallet();
-  const { setNavigated } = useAppState();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const { setPassword } = usePasswordStore();
 
@@ -65,7 +63,6 @@ const CreateAccount = () => {
   useEffect(() => {
     showBackButton();
     generateWallet();
-    setNavigated(true);
   }, []);
 
   const renderOptionButton = (num: number) => {
