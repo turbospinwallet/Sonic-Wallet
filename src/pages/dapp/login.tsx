@@ -10,7 +10,6 @@ import { useCreateUser } from '@/hooks/queries/user';
 import { useTelegram } from '@/hooks/useTelegram';
 import { useWallet } from '@/hooks/useWallet';
 import useNotification from '@/hooks/useNotification';
-import { useAppState } from '@/modules/shared/state/app-state';
 import PasswordModal from '@/modules/shared/components/PasswordModal';
 import { usePasswordStore } from '@/stores/passwordStore';
 
@@ -25,7 +24,6 @@ const Login = () => {
   const { mutateAsync: createUser } = useCreateUser();
   const { userInfo, params } = useTelegram();
   const { formatWalletSaved } = useWallet();
-  const { setNavigated } = useAppState();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const { setPassword } = usePasswordStore();
 
@@ -88,7 +86,6 @@ const Login = () => {
 
   useEffect(() => {
     showBackButton();
-    setNavigated(true);
   }, []);
 
   return (

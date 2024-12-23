@@ -1,6 +1,8 @@
 import { create } from 'zustand';
-import { sonicBlazeChain, sonicMainnetChain } from '@/common/connectors';
+import type { Chain } from 'viem';
+import { NETWORKS } from '@/common/connectors';
 import reactiveStorage from '@/internals/reactive-storage';
+import type { CHAIN_TOKENS } from '@/common/constants/tokens';
 
 interface NetworkStore {
   currentChainId: number;
@@ -10,7 +12,7 @@ interface NetworkStore {
 // Get initial chain ID from storage or default to mainnet
 const getInitialChainId = () => {
   const savedChainId = reactiveStorage.get('SELECTED_NETWORK');
-  return savedChainId ?? sonicMainnetChain.id;
+  return savedChainId ?? NETWORKS.SONIC_MAINNET.id;
 };
 
 export const useNetworkStore = create<NetworkStore>((set) => ({
@@ -21,6 +23,27 @@ export const useNetworkStore = create<NetworkStore>((set) => ({
   },
 }));
 
-export const getChainConfig = (chainId: number) => {
-  return chainId === sonicMainnetChain.id ? sonicMainnetChain : sonicBlazeChain;
+export const getChainConfig = (chainId: number): Chain & { label: string } => {
+  switch (chainId) {
+    case NETWORKS.SONIC_MAINNET.id:
+      return NETWORKS.SONIC_MAINNET;
+    case NETWORKS.FANTOM.id:
+      return NETWORKS.FANTOM;
+    case NETWORKS.SONIC_BLAZE.id:
+    default:
+      return NETWORKS.SONIC_BLAZE;
+  }
+};
+
+// Helper function to check if a chain is supported
+export const isSupportedChain = (chainId: number): boolean => {
+  return [NETWORKS.SONIC_MAINNET.id, NETWORKS.SONIC_BLAZE.id, NETWORKS.FANTOM.id].includes(
+    chainId as keyof typeof CHAIN_TOKENS
+  );
+};
+
+// Get chain name for display
+export const getChainName = (chainId: number): string => {
+  const chain = getChainConfig(chainId);
+  return chain.label || chain.name;
 };

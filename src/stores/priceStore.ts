@@ -19,7 +19,9 @@ interface PriceStore {
 const COINGECKO_API = 'https://api.coingecko.com/api/v3';
 export const COIN_ID_MAP = {
   S: 'fantom',
-};
+  FTM: 'fantom',
+  SONIC: 'fantom',
+} as const;
 
 export const usePriceStore = create<PriceStore>((set, get) => ({
   prices: {},

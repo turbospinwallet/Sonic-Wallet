@@ -42,8 +42,6 @@ export const useWallet = () => {
   const decryptWalletData = useCallback(
     (wallet: SavedUserCredential | undefined, password: string) => {
       if (!wallet) return null;
-      console.log('wallet', wallet);
-      console.log('decrypt', decrypt(wallet.privateKey!, password));
       try {
         return {
           ...wallet,
@@ -130,6 +128,33 @@ export const useWallet = () => {
     setForceUpdate((prev) => prev + 1);
   }, []);
 
+  const removeAccount = useCallback(
+    (addressToRemove: string) => {
+      const credentials = reactiveStorage.get('USER_CREDENTIAL') || {};
+
+      // Prevent removing the last account
+      if (Object.keys(credentials).length <= 1) {
+        throw new Error('Cannot remove the last account');
+      }
+
+      // Remove the account from credentials
+      const updatedCredentials = { ...credentials };
+      delete updatedCredentials[addressToRemove];
+
+      reactiveStorage.set('USER_CREDENTIAL', updatedCredentials);
+
+      // If removing active wallet, switch to first available account
+      if (addressToRemove === address) {
+        const firstAddress = Object.keys(updatedCredentials)[0];
+        switchWallet(firstAddress);
+      }
+
+      // Force update the wallet state
+      setForceUpdate((prev) => prev + 1);
+    },
+    [address, switchWallet]
+  );
+
   return {
     address: currentAddress,
     wallet,
@@ -143,5 +168,6 @@ export const useWallet = () => {
     verifyPassword,
     setPassword: setPasswordStore,
     password,
+    removeAccount,
   };
 };

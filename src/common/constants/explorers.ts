@@ -1,8 +1,9 @@
-import { sonicBlazeChain, sonicMainnetChain } from '@/common/connectors';
+import { NETWORKS } from '@/common/connectors';
 
 export const EXPLORER_URLS = {
-  [sonicMainnetChain.id]: 'https://sonicscan.org',
-  [sonicBlazeChain.id]: 'https://testnet.soniclabs.com',
+  [NETWORKS.SONIC_MAINNET.id]: 'https://sonicscan.org',
+  [NETWORKS.SONIC_BLAZE.id]: 'https://testnet.soniclabs.com',
+  [NETWORKS.FANTOM.id]: 'https://ftmscan.com',
 } as const;
 
 export const getExplorerUrl = (
