@@ -121,7 +121,9 @@ export const useCoins = (address: string | undefined) => {
     const nativeToken =
       CHAIN_TOKENS[currentChainId as keyof typeof CHAIN_TOKENS] ||
       CHAIN_TOKENS[NETWORKS.SONIC_MAINNET.id];
-    const priceData = prices[COIN_ID_MAP[nativeToken.symbol]];
+
+    // Get price data for the current network's native token
+    const priceData = prices[COIN_ID_MAP[nativeToken.symbol] || 'fantom'];
     const usdPrice = priceData?.usd || 0;
     const usdValue = (Number(formattedBalance) * usdPrice).toString();
     const priceChange = priceData?.usd_24h_change?.toString() || '0';

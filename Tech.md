@@ -8,13 +8,6 @@
 6. Serverside state: @tanstack/query
 7. Web3 connector: wagmi
 8. UI framework
-9. Jira
-10. Kanban / Scrum-agile
-    - Put tasks in the backlog (priority)
-    - In progress => Blocked => Link task blocked to current ticket
-    - Code Review
-    - Demo
-    - Done
 
 - Home page - corporate website
 
@@ -26,9 +19,10 @@
 - Demo
 
 ### Git flow
+
 - Develop: Checkout tu branch nay
-    - Code xong => Tao pull request => develop
-    - 1 nguoi approve => merge
-    - Merge => Deploy dev
+  - Code xong => Tao pull request => develop
+  - 1 nguoi approve => merge
+  - Merge => Deploy dev
 - Main: Merge develop to main
-    - Deploy main
+  - Deploy main

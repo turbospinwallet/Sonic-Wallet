@@ -3,33 +3,33 @@ import { FiAward, FiCreditCard, FiDollarSign, FiImage, FiPlay, FiZap } from 'rea
 
 const features = [
   {
-    title: 'Transaction Fees',
-    description: 'Seamless wallet integration, DEX trading, and swap functionality',
-    icon: FiCreditCard,
-  },
-  {
-    title: 'Staking & Yield Farming',
-    description: 'Earn rewards through staking and platform fee sharing',
-    icon: FiDollarSign,
-  },
-  {
-    title: 'Launchpad',
-    description: 'IDO platform for promising blockchain startups',
-    icon: FiZap,
-  },
-  {
-    title: 'Mini-Games & Play-to-Earn',
-    description: 'Gamified rewards system with NFT integration',
+    title: 'Mini Games',
+    description: 'Play fun, interactive games and earn digital rewards directly within Telegram',
     icon: FiPlay,
   },
   {
+    title: 'Launchpad',
+    description: 'Discover and support the next big blockchain projects from a secure platform',
+    icon: FiZap,
+  },
+  {
+    title: 'Yield Farming',
+    description: 'Maximize your crypto earnings through innovative DeFi tools',
+    icon: FiDollarSign,
+  },
+  {
     title: 'NFT Marketplace',
-    description: 'Buy, sell, and mint unique digital assets',
+    description: 'Create, trade, and showcase unique digital collectibles',
     icon: FiImage,
   },
   {
-    title: 'Premium Subscriptions',
-    description: 'Exclusive benefits for $SPIN token holders',
+    title: 'DEX Integration',
+    description: 'Enjoy secure, peer-to-peer crypto trading with no intermediaries',
+    icon: FiCreditCard,
+  },
+  {
+    title: 'Premium Features',
+    description: 'Access exclusive benefits and advanced trading tools',
     icon: FiAward,
   },
 ];

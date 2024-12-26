@@ -18,3 +18,10 @@ export const GOLD_COIN_TYPE = `${GAME_CONTRACT}::gold::GOLD`;
 export const TEST_USER_TELEGRAM = process.env.NEXT_PUBLIC_TEST_USER_TELEGRAM as string;
 
 export const DEFAULT_GAS_BUDGET = 10_000_000;
+
+export const SOCIAL_LINKS = {
+  X: 'https://x.com/Turbospin0x',
+  TELEGRAM_CHANNEL: 'https://t.me/turbospin_s',
+  TELEGRAM_GROUP: 'https://t.me/turbospin0x',
+  BOT_LINK: 'https://t.me/TurboSpinWallet_bot',
+} as const;

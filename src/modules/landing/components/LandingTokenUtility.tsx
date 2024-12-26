@@ -1,26 +1,26 @@
 import { motion } from 'framer-motion';
-import { FiLock, FiShield, FiStar, FiZap } from 'react-icons/fi';
+import { FiCreditCard, FiPlay, FiStar, FiZap } from 'react-icons/fi';
 
 const utilities = [
   {
-    title: 'Staking Rewards',
-    description: 'Earn passive income by staking your $SPIN tokens',
+    title: 'Transaction Fees',
+    description: 'Competitive and tiered fee structure based on user activity levels',
+    icon: FiCreditCard,
+  },
+  {
+    title: 'Staking & Farming',
+    description: 'Earn rewards by locking your $SPIN tokens or other assets',
     icon: FiStar,
   },
   {
-    title: 'Governance Rights',
-    description: 'Participate in platform decisions and proposals',
-    icon: FiShield,
-  },
-  {
-    title: 'Premium Access',
-    description: 'Unlock exclusive features and benefits',
-    icon: FiLock,
-  },
-  {
-    title: 'Token Burns',
-    description: 'Regular burns increase scarcity and value',
+    title: 'Launchpad Revenue',
+    description: 'Fees from IDO listings and participation',
     icon: FiZap,
+  },
+  {
+    title: 'Gaming Revenue',
+    description: 'Income from mini-games and NFT-based assets',
+    icon: FiPlay,
   },
 ];
 

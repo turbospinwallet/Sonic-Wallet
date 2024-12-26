@@ -1,26 +1,28 @@
 import Image from 'next/image';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import ClaimCooldown from '@/modules/claim/components/ClaimCooldown';
 import Value from '@/components/Value';
 import { useAppState } from '@/modules/shared/state/app-state';
 import { useUserState } from '@/modules/shared/state/user-state';
 import { useCreateUserWeb3, useGetUserByAddress } from '@/hooks/queries/user';
 import { useWallet } from '@/hooks/useWallet';
+import useClaim from '@/hooks/useClaim';
+import IconLoading from '@/components/IconLoading/IconLoading';
 
 const ClaimCountdown = () => {
   const { claimInfo } = useAppState();
   const { userInfo } = useUserState();
   const { refreshUserClaimInfo, refreshBalance } = useAppState();
   const { address } = useWallet();
-  // const { mutateAsync: handleClaim, isPending } = useClaim();
   const { mutateAsync: createUserWeb3, isPending: isPendingCreateUser } = useCreateUserWeb3();
   const { mutateAsync: fetchUserByAddress, isPending: isPendingRefreshUser } =
     useGetUserByAddress();
+  const { mutateAsync: handleClaim, isPending } = useClaim();
 
-  // const pending = useMemo(
-  //   () => isPending || isPendingCreateUser || isPendingRefreshUser,
-  //   [isPending, isPendingCreateUser, isPendingRefreshUser]
-  // );
+  const pending = useMemo(
+    () => isPending || isPendingCreateUser || isPendingRefreshUser,
+    [isPending, isPendingCreateUser, isPendingRefreshUser]
+  );
 
   const onCreateUserWeb3 = useCallback(async (address: string) => {
     try {
@@ -37,10 +39,10 @@ const ClaimCountdown = () => {
         return await onCreateUserWeb3(address);
       }
       if (address) {
-        // await handleClaim();
+        await handleClaim();
       }
-    } catch (e) {
-      // noop
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -76,10 +78,10 @@ const ClaimCountdown = () => {
           />
         ) : (
           <button
-            // disabled={pending}
+            disabled={pending}
             onClick={() => handlePressClaim()}
           >
-            {/* {pending ? (
+            {pending ? (
               <IconLoading />
             ) : (
               <Image
@@ -89,7 +91,7 @@ const ClaimCountdown = () => {
                 width={76}
                 className="mx-auto mt-2"
               />
-            )} */}
+            )}
           </button>
         )}
         <div

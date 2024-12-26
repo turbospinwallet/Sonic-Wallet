@@ -1,14 +1,24 @@
 import React from 'react';
 import LandingHero from '@/modules/landing/components/LandingHero';
+import LandingFooter from '@/modules/landing/components/LandingFooter';
+import LandingFeatures from '@/modules/landing/components/LandingFeatures';
+import LandingWhyChoose from '@/modules/landing/components/LandingWhyChoose';
+import LandingTokenUtility from '@/modules/landing/components/LandingTokenUtility';
+import LandingRoadmap from '@/modules/landing/components/LandingRoadmap';
+import LandingTokenomics from '@/modules/landing/components/LandingTokenomics';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-secondary">
+    <main className="min-h-screen ">
       <LandingHero />
-      {/* <LandingFeatures /> */}
-      {/* <LandingWhyChoose /> */}
-      {/* <LandingTokenUtility /> */}
-      {/* <LandingFooter /> */}
-    </div>
+      <div className="bg-secondary">
+        <LandingFeatures />
+        <LandingWhyChoose />
+        <LandingTokenUtility />
+        <LandingTokenomics />
+        <LandingRoadmap />
+        <LandingFooter />
+      </div>
+    </main>
   );
 }
