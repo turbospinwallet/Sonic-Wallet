@@ -70,7 +70,7 @@ const Wallet = () => {
             menu={
               <div className="flex items-center text-sm text-neutral bg-neutral/5 px-3 py-1.5 rounded-lg">
                 <Image
-                  src={getNetworkIcon(currentChainId)}
+                  src="/images/sonic-black.svg"
                   alt="network"
                   width={16}
                   height={16}
@@ -163,8 +163,14 @@ const Wallet = () => {
               <p className="text-xs text-neutral/70">Experience the thrill of our upcoming game</p>
             </div>
             <div className="bg-primary/20 px-3 py-1 rounded-full">
-              <span className="text-primary text-sm font-medium">Coming Soon</span>
+              <span className="text-primary text-sm font-medium">Comingsoon</span>
             </div>
+            {/* <Link
+              href="/dapp/claim"
+              className="bg-primary/20 px-3 py-1 rounded-full"
+            >
+              <span className="text-primary text-sm font-medium">Claim</span>
+            </Link> */}
           </div>
         </div>
       </div>

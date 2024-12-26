@@ -10,7 +10,7 @@ export default function Document() {
         {/*  href="/favicon.png"*/}
         {/*/>*/}
       </Head>
-      <body className="bg-color-bg text-white">
+      <body>
         <Main />
         <NextScript />
       </body>

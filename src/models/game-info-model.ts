@@ -14,7 +14,11 @@ export interface GameInfo {
   fishTypeLevel: {
     rate: number;
   }[];
-  specialBoost: [];
+  specialBoost: {
+    level: number;
+    rate: number;
+    price: string;
+  }[];
   seafoodInfos: {
     enable: boolean;
     level: number;
@@ -41,4 +45,16 @@ export interface ClaimInfo {
   unClaimedAmount: number | string;
   progress: number | string;
   fullClaimed: number | string;
+}
+
+export interface GameContractInfo {
+  boat: number;
+  mesh: number;
+  seafood: number;
+  specialBoost: number;
+  specialBoostStartTime: number;
+  village: string;
+  referral: string;
+  lastClaim: number;
+  exists: boolean;
 }
