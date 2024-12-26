@@ -1,27 +1,14 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { FaTelegram, FaXTwitter } from 'react-icons/fa6';
+import Link from 'next/link';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
+import { SOCIAL_LINKS } from '@/common/constants/const';
+import SonicStormBackground from '@/modules/landing/components/SonicStormBackground';
 
 export default function LandingHero() {
-  const router = useRouter();
-
-  const handleExploreFeatures = () => {
-    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <motion.div
-        className="absolute inset-0 opacity-10"
-        initial={{ rotate: 0 }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-primary to-transparent" />
-      </motion.div>
-
+      <SonicStormBackground />
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center space-y-8">
           <motion.div
@@ -43,19 +30,21 @@ export default function LandingHero() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-4xl md:text-6xl font-bold tracking-tight text-neutral"
+            className="text-6xl font-extrabold text-white mb-6 tracking-tight text-center"
           >
-            Fast, Decentralized, and Profitable
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-white to-blue-600">
+              Turbo Spin Wallet
+            </span>
           </motion.h1>
 
           <motion.p
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-lg md:text-xl text-neutral/70 max-w-2xl mx-auto"
+            className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto"
           >
-            Experience the future of decentralized finance with our integrated ecosystem of DeFi,
-            NFTs, and gaming.
+            An innovative cryptocurrency wallet built on the Sonic Network, seamlessly integrated
+            with the Telegram Mini App platform. Fast, secure, and accessible.
           </motion.p>
 
           <motion.div
@@ -64,43 +53,17 @@ export default function LandingHero() {
             transition={{ delay: 0.4 }}
             className="flex flex-col items-center gap-6"
           >
-            <ButtonCustom
-              color="primary"
-              className="w-full sm:w-auto font-bold"
+            <Link
+              href={SOCIAL_LINKS.BOT_LINK}
+              target="_blank"
             >
-              Coming Soon
-            </ButtonCustom>
-
-            <div className="flex gap-6">
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral hover:text-primary transition-colors"
+              <ButtonCustom
+                color="primary"
+                className="w-full sm:w-auto font-bold"
               >
-                <FaXTwitter size={24} />
-              </a>
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral hover:text-primary transition-colors"
-              >
-                <FaTelegram size={24} />
-              </a>
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral hover:text-primary transition-colors"
-              >
-                <img
-                  src="/images/linktree.png"
-                  alt="linktree"
-                  className="w-6 h-6"
-                />
-              </a>
-            </div>
+                Launch App
+              </ButtonCustom>
+            </Link>
           </motion.div>
         </div>
       </div>

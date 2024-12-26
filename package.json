@@ -67,6 +67,7 @@
 		"react-toastify": "^9.1.1",
 		"react-use": "^17.4.0",
 		"readline": "^1.3.0",
+		"recharts": "^2.15.0",
 		"sass-loader": "^13.2.2",
 		"typescript": "^5.2.2",
 		"use-dehydrated-state": "^0.1.0",

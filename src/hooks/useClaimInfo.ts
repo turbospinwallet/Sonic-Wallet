@@ -7,6 +7,9 @@ import { useAppState } from '@/modules/shared/state/app-state';
 const useClaimInfo = () => {
   const { wallet } = useWallet();
   const { setClaimInfo, userClaimInfo, gameInfo } = useAppState();
+
+  console.log('userClaimInfo', userClaimInfo);
+
   const getClamInfo = () => {
     try {
       if (!gameInfo) {

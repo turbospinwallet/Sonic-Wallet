@@ -2,14 +2,15 @@ import React from 'react';
 import { ClaimButtonDisplayBalance } from './ClaimButtonDisplayBalance';
 // import useSeafood from '@/hooks/useSeafood';
 import { useAppState } from '@/modules/shared/state/app-state';
-import { GOLD_COIN_TYPE } from '@/common/constants/const';
-import useCoin from '@/hooks/useCoin';
 import { useModalState } from '@/modules/shared/state/modal-state';
 
 const ClaimHeader = () => {
   const { openUpgradeModal } = useModalState();
   const { userClaimInfo, gameInfo } = useAppState();
-  const goldToken = useCoin(GOLD_COIN_TYPE);
+
+  console.log('userClaimInfo', userClaimInfo);
+  console.log('gameInfo', gameInfo);
+  // const goldToken = useCoin(GOLD_COIN_TYPE);
   // const { mutateAsync: handleUpgrade } = useSeafood();
 
   // const seafoodUser = gameInfo?.seafoodInfos?.[userClaimInfo?.seafood || 0];
@@ -23,7 +24,7 @@ const ClaimHeader = () => {
   return (
     <div className="mt-4 px-6 flex justify-between">
       <ClaimButtonDisplayBalance
-        loading={goldToken.balanceLoading}
+        // loading={goldToken.balanceLoading}
         // value={formatSUI(BigInt(goldToken.balance))}
         value=""
         iconLeft={{

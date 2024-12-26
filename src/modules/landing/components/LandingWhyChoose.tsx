@@ -3,27 +3,27 @@ import { FiDollarSign, FiSmartphone, FiUsers, FiZap } from 'react-icons/fi';
 
 const reasons = [
   {
-    title: 'Fast & Scalable',
-    description: 'Built on the robust Sonic blockchain',
-    icon: FiZap,
+    title: 'Telegram Integration',
+    description: "Seamless experience within one of the world's most popular messaging platforms",
+    icon: FiSmartphone,
     color: 'from-blue-500/20 to-purple-500/20',
   },
   {
-    title: 'Integrated Mini App',
-    description: 'Seamless experience on Telegram',
-    icon: FiSmartphone,
+    title: 'Fast & Secure',
+    description: 'Powered by the Sonic blockchain for rapid and reliable transactions',
+    icon: FiZap,
     color: 'from-green-500/20 to-teal-500/20',
   },
   {
-    title: 'Multiple Revenue Streams',
-    description: 'DeFi, NFTs, games, and staking',
-    icon: FiDollarSign,
+    title: 'User-Friendly',
+    description: 'No need for external apps—everything is accessible within Telegram',
+    icon: FiUsers,
     color: 'from-yellow-500/20 to-orange-500/20',
   },
   {
-    title: 'User-Centric',
-    description: 'Rewarding users through staking, farming, and play-to-earn mechanisms',
-    icon: FiUsers,
+    title: 'Future-Proof',
+    description: 'Designed to expand with new DApps and features as the ecosystem grows',
+    icon: FiDollarSign,
     color: 'from-pink-500/20 to-rose-500/20',
   },
 ];
