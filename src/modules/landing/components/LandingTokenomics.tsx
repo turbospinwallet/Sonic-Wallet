@@ -1,19 +1,18 @@
 import { motion } from 'framer-motion';
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
+import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
 import { useState } from 'react';
 
 const tokenomicsData = [
-  { name: 'Public Sale', value: 10, color: '#7FFFD4' }, // Aquamarine
-  { name: 'Private Sale', value: 15, color: '#98FB98' }, // Pale Green
-  { name: 'Team & Advisors', value: 15, color: '#87CEEB' }, // Sky Blue
-  { name: 'Ecosystem Growth', value: 20, color: '#40E0D0' }, // Turquoise
-  { name: 'Community & Airdrop', value: 10, color: '#48D1CC' }, // Medium Turquoise
-  { name: 'Staking & Yield Farming', value: 15, color: '#00CED1' }, // Dark Turquoise
-  { name: 'Liquidity', value: 10, color: '#5F9EA0' }, // Cadet Blue
-  { name: 'Reserves', value: 5, color: '#4682B4' }, // Steel Blue
+  { name: 'Public Sale', value: 10, color: '#7FFFD4' },
+  { name: 'Private Sale', value: 15, color: '#98FB98' },
+  { name: 'Team & Advisors', value: 15, color: '#87CEEB' },
+  { name: 'Ecosystem Growth', value: 20, color: '#40E0D0' },
+  { name: 'Community & Airdrop', value: 10, color: '#48D1CC' },
+  { name: 'Staking & Yield Farming', value: 15, color: '#00CED1' },
+  { name: 'Liquidity', value: 10, color: '#5F9EA0' },
+  { name: 'Reserves', value: 5, color: '#4682B4' },
 ];
 
-// Render active shape when a sector is hovered/clicked
 const renderActiveShape = (props: any) => {
   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload, value } = props;
 
@@ -25,7 +24,7 @@ const renderActiveShape = (props: any) => {
         dy={-20}
         textAnchor="middle"
         fill="#fff"
-        className="text-lg font-medium"
+        className="text-sm md:text-lg font-medium"
       >
         {payload.name}
       </text>
@@ -35,7 +34,7 @@ const renderActiveShape = (props: any) => {
         dy={20}
         textAnchor="middle"
         fill="#fff"
-        className="text-2xl font-bold"
+        className="text-xl md:text-2xl font-bold"
       >
         {value}%
       </text>
@@ -43,7 +42,7 @@ const renderActiveShape = (props: any) => {
         cx={cx}
         cy={cy}
         innerRadius={innerRadius}
-        outerRadius={Number(outerRadius) + 10}
+        outerRadius={Number(outerRadius) + 5}
         startAngle={startAngle}
         endAngle={endAngle}
         fill={fill}
@@ -64,27 +63,27 @@ export default function LandingTokenomics() {
   };
 
   return (
-    <section className="py-24 bg-secondary relative overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section className="py-16 md:py-24 bg-secondary relative overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral mb-4">Tokenomics</h2>
-          <p className="text-neutral/70 max-w-2xl mx-auto">
+          <h2 className="text-2xl md:text-4xl font-bold text-neutral mb-4">Tokenomics</h2>
+          <p className="text-neutral/70 max-w-2xl mx-auto px-4">
             $SPIN token distribution and allocation
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 md:gap-12">
           {/* Chart */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true }}
-            className="h-[400px] w-full"
+            className="h-[400px] lg:h-[500px] w-full order-2 lg:order-1"
           >
             <ResponsiveContainer
               width="100%"
@@ -98,7 +97,7 @@ export default function LandingTokenomics() {
                   cx="50%"
                   cy="50%"
                   innerRadius={80}
-                  outerRadius={150}
+                  outerRadius={140}
                   fill="#8884d8"
                   dataKey="value"
                   onMouseEnter={onPieEnter}
@@ -114,12 +113,6 @@ export default function LandingTokenomics() {
                     />
                   ))}
                 </Pie>
-                <Legend
-                  layout="vertical"
-                  align="right"
-                  verticalAlign="middle"
-                  formatter={(value) => <span className="text-neutral/80">{value}</span>}
-                />
               </PieChart>
             </ResponsiveContainer>
           </motion.div>
@@ -129,12 +122,12 @@ export default function LandingTokenomics() {
             initial={{ x: 50, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             viewport={{ once: true }}
-            className="space-y-6"
+            className="space-y-3 md:space-y-4 order-1 lg:order-2"
           >
             {tokenomicsData.map((item, index) => (
               <div
                 key={item.name}
-                className={`flex items-center gap-4 p-4 rounded-lg transition-colors duration-300 cursor-pointer
+                className={`flex items-center gap-3 p-3 md:p-4 rounded-lg transition-colors duration-300 cursor-pointer text-sm md:text-base
                   ${
                     activeIndex === index ? 'bg-white/20 shadow-lg' : 'bg-white/5 hover:bg-white/10'
                   }`}
@@ -143,13 +136,13 @@ export default function LandingTokenomics() {
                 onClick={() => setActiveIndex(index)}
               >
                 <div
-                  className="w-4 h-4 rounded-full"
+                  className="w-3 h-3 md:w-4 md:h-4 rounded-full flex-shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
-                <div className="flex-1">
-                  <h3 className="text-neutral font-medium">{item.name}</h3>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-neutral font-medium truncate">{item.name}</h3>
                 </div>
-                <div className="text-neutral/80 font-bold">{item.value}%</div>
+                <div className="text-neutral/80 font-bold flex-shrink-0">{item.value}%</div>
               </div>
             ))}
           </motion.div>
