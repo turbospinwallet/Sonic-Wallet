@@ -9,13 +9,15 @@ import LandingFooter from '@/modules/landing/components/LandingFooter';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-secondary">
+    <div className="min-h-screen flex flex-col bg-secondary overflow-x-hidden">
       <LandingHero />
-      <LandingFeatures />
-      <LandingWhyChoose />
-      <LandingTokenUtility />
-      <LandingTokenomics />
-      <LandingRoadmap />
+      <div className="flex-1">
+        <LandingFeatures />
+        <LandingWhyChoose />
+        <LandingTokenUtility />
+        <LandingTokenomics />
+        <LandingRoadmap />
+      </div>
       <LandingFooter />
     </div>
   );
