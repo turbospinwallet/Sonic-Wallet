@@ -9,13 +9,13 @@ export default function LandingHero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <SonicStormBackground />
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center space-y-8">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="text-center flex flex-col items-center max-w-2xl mx-auto">
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="mx-auto w-48 h-48 relative mb-8"
+            className="w-24 h-24 md:w-32 md:h-32 relative mb-8"
           >
             <Image
               src="/images/logo.png"
@@ -30,7 +30,7 @@ export default function LandingHero() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-6xl font-extrabold text-white mb-6 tracking-tight text-center"
+            className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight"
           >
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-white to-blue-600">
               Turbo Spin Wallet
@@ -41,7 +41,7 @@ export default function LandingHero() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto"
+            className="text-base md:text-lg text-neutral/80 mb-8 px-4"
           >
             An innovative cryptocurrency wallet built on the Sonic Network, seamlessly integrated
             with the Telegram Mini App platform. Fast, secure, and accessible.
@@ -51,7 +51,6 @@ export default function LandingHero() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="flex flex-col items-center gap-6"
           >
             <Link
               href={SOCIAL_LINKS.BOT_LINK}
@@ -59,7 +58,7 @@ export default function LandingHero() {
             >
               <ButtonCustom
                 color="primary"
-                className="w-full sm:w-auto font-bold"
+                className="px-8 py-3 text-base font-semibold rounded-lg"
               >
                 Launch App
               </ButtonCustom>
